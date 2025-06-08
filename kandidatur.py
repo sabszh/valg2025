@@ -4,7 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # --- Indstillinger ---
-candidates = ["Anna", "Bjørn", "Clara", "David", "Elias"]
+candidates = ["Test1", "Test2", "Test3", "Test4", "Test5"]
 sheet_name = "Bestyrelsesvalg 2025"
 
 # --- Funktion: Generér anonym ID ---
