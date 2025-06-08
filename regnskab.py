@@ -12,10 +12,11 @@ def get_pseudonym(email):
     salt = st.secrets["hash_salt"]
     return hashlib.sha256(f"{email}{salt}".encode()).hexdigest()
 
-# --- Funktion: Opret forbindelse til ark ---
+# --- Funktion: Opret forbindelse til ark via secrets ---
 def get_sheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("google_key.json", scope)
+    creds_dict = st.secrets["gcp_service_account"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
     return client.open(sheet_name).sheet1
 
@@ -31,8 +32,8 @@ def submit_vote_to_sheet(pseudonym, vote):
     sheet.append_row([pseudonym, vote])
 
 # --- Start App ---
-st.title("🧾 Afstemning om Regnskab 2024")
-st.write("Afgiv din stemme om godkendelse af årsrapporten inkl. regnskab for 2024.")
+st.title("🧾 Afstemning om Regnskab 2025")
+st.write("Afgiv din stemme om godkendelse af årsrapporten inkl. regnskab for 2025.")
 
 # --- Login UI ---
 if not st.session_state.get("authenticated"):
@@ -57,7 +58,7 @@ if not st.session_state.get("authenticated"):
 # --- Afstemning UI ---
 st.subheader("🗳️ Afgiv din stemme")
 
-vote = st.radio("Hvad er din holdning til regnskabet for 2024?", options)
+vote = st.radio("Hvad er din holdning til regnskabet for 2025?", options)
 
 if st.button("Afgiv stemme"):
     st.session_state["pending_vote"] = vote

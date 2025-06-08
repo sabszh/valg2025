@@ -12,10 +12,11 @@ def get_pseudonym(email):
     salt = st.secrets["hash_salt"]
     return hashlib.sha256(f"{email}{salt}".encode()).hexdigest()
 
-# --- Funktion: Opret forbindelse til ark ---
+# --- Funktion: Opret forbindelse til ark via secrets ---
 def get_sheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("google_key.json", scope)
+    creds_dict = st.secrets["gcp_service_account"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
     return client.open(sheet_name).sheet1
 
